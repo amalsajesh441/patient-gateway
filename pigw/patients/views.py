@@ -12,6 +12,12 @@ from .tasks import send_welcome_email
 
 class PatientIntakeView(APIView):
     def post(self, request):
+        """
+        This endpoint accepts a FHIR R4 Patient JSON payload, validates the data,
+        enforces business rules (patient must be 18+), encrypts PHI fields such as
+        SSN and Passport, stores the full raw payload for audit purposes, and
+        triggers an asynchronous welcome email.
+        """
         serializer = PatientIntakeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -42,6 +48,11 @@ class PatientIntakeView(APIView):
 
 class PatientRetrieveView(APIView):
     def get(self, request, patient_id):
+        """
+        This endpoint fetches a stored patient record, decrypts and masks
+        sensitive PHI fields (SSN), and logs the access for HIPAA audit
+        compliance.
+        """
         patient = get_object_or_404(PatientRecord, patient_id=patient_id)
 
         ssn = decrypt_value(patient.encrypted_ssn)

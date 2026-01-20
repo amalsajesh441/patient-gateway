@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'patients',
-    'django_celery_results',
-    'drf_yasg',
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [

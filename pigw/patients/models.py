@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class PatientRecord(models.Model):
+    """
+    Stores patient information ingested from external FHIR systems.
+    """
     patient_id = models.CharField(max_length=100, unique=True)
     full_name = models.CharField(max_length=255)
     gender = models.CharField(max_length=20)
@@ -19,6 +22,9 @@ class PatientRecord(models.Model):
 
 
 class AccessLog(models.Model):
+    """
+    Tracks access to patient records for HIPAA audit compliance.
+    """
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     ip_address = models.GenericIPAddressField()
     patient = models.ForeignKey(PatientRecord, on_delete=models.CASCADE)
